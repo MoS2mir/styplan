@@ -1,19 +1,60 @@
-<footer class="footer -dashboard mt-60">
-    <div class="footer__row row y-gap-10 items-center justify-between">
-        <div class="col-auto">
-            <div class="row y-gap-20 items-center">
-                <div class="col-auto">
-                    <div class="text-14 lh-14 mr-30">
-                        <?php echo setting_item_with_lang("footer_text_left") ?? ''; ?>
+<footer class="footer -type-custom py-60" style="background-color: #151F30; color: white;">
+    <div class="container">
+        <div class="row y-gap-40 justify-between items-start">
 
+            <div class="col-xl-7 col-lg-8" style="width: 37.33333%;">
+                <div class="row y-gap-30 text-center" style="text-align: center;">
+                    <div class="col-sm-6">
+                        <ul class="y-gap-15">
+                            <li><a href="/ شروط الأستخدام" style="color: white; font-size: 18px; font-weight: 400;">شروط
+                                    الأستخدام</a></li>
+                            <li><a href="/ الاسئلة المتكررة"
+                                    style="color: white; font-size: 18px; font-weight: 400;">الاسئلة المتكررة</a></li>
+                            <li><a href="/ تواصل معنا" style="color: white; font-size: 18px; font-weight: 400;">تواصل
+                                    معنا</a></li>
+                            <li class="mt-15">
+                                <a href="/login?register=1" class="button px-30 py-15 rounded-8 text-black"
+                                    style="background-color: #555555; color: white; min-width: 140px; display: inline-flex; justify-content: center;">
+                                    اضف عقارك
+                                </a>
+                            </li>
+                        </ul>
                     </div>
+                    <div class="col-sm-6">
+                        <ul class="y-gap-15">
+                            <li><a href="#" style="color: white; font-size: 18px; font-weight: 400;">شقق و بيوت</a></li>
+                            <li><a href="#" style="color: white; font-size: 18px; font-weight: 400;">استراحات و
+                                    شاليهات</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-auto text-left">
+                <div class="footer-logo">
+                    <img src="<?php echo e(url('/uploads/0000/6/2024/08/11/logo-light.png')); ?>" alt="StayPlan | ستاي بلان"
+                        style="max-height: 60px;">
                 </div>
             </div>
         </div>
 
-        <div class="col-auto">
-            <div class="d-flex x-gap-5 y-gap-5 items-center">
 
+        <div class="pt-60 mt-60">
+            <div class="row justify-between items-center y-gap-20">
+                <div class="col-auto">
+                    <div class="text-white-50 text-15 fw-400">
+                        جميع الحقوق محفوظة 2026 StayPlan | ستاي بلان
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="social-capsule d-flex x-gap-25 items-center bg-white px-25 py-10 rounded-20">
+                        <a href="#" class="text-black text-22"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="text-black text-22"><i class="fa fa-instagram"></i></a>
+                        <a href="#" class="text-black text-22"><i class="fa fa-youtube-play"></i></a>
+                        <a href="#" class="text-black text-22"><i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -31,29 +72,27 @@
 <?php echo App\Helpers\MapEngine::scripts(); ?>
 
 
-<script src="<?php echo e(asset('libs/vue/vue'.(!env('APP_DEBUG') ? '.min':'').'.js')); ?>"></script>
+<script src="<?php echo e(asset('libs/vue/vue' . (!env('APP_DEBUG') ? '.min' : '') . '.js')); ?>"></script>
 <script type="text/javascript" src="<?php echo e(asset('themes/gotrip/libs/bs/js/bootstrap.bundle.min.js')); ?>"></script>
 <script src="<?php echo e(asset('libs/bootbox/bootbox.min.js')); ?>"></script>
 <script type="text/javascript" src="<?php echo e(asset('themes/gotrip/js/vendors.js')); ?>"></script>
 <script type="text/javascript" src="<?php echo e(asset('themes/gotrip/js/main.js')); ?>"></script>
 <?php if(Auth::id()): ?>
-    <script src="<?php echo e(asset('module/media/js/browser.js?_ver='.config('app.version'))); ?>"></script>
+    <script src="<?php echo e(asset('module/media/js/browser.js?_ver=' . config('app.version'))); ?>"></script>
 <?php endif; ?>
 <script src="<?php echo e(asset('libs/carousel-2/owl.carousel.min.js')); ?>"></script>
 <script type="text/javascript" src="<?php echo e(asset("libs/daterange/moment.min.js")); ?>"></script>
 <script type="text/javascript" src="<?php echo e(asset("libs/daterange/daterangepicker.min.js")); ?>"></script>
 <script src="<?php echo e(asset('libs/select2/js/select2.min.js')); ?>"></script>
-<script src="<?php echo e(asset('module/user/js/user.js?_ver='.config('app.asset_version'))); ?>"></script>
+<script src="<?php echo e(asset('module/user/js/user.js?_ver=' . config('app.asset_version'))); ?>"></script>
 
 
 
-<script src="<?php echo e(asset('themes/gotrip/dist/frontend/js/gotrip.js?_ver='.config('app.version'))); ?>"></script>
+<script src="<?php echo e(asset('themes/gotrip/dist/frontend/js/gotrip.js?_ver=' . config('app.version'))); ?>"></script>
 
 <?php \App\Helpers\ReCaptchaEngine::scripts() ?>
 <?php if(setting_item('user_enable_2fa')): ?>
     <?php echo $__env->make('auth.confirm-password-modal', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <script src="<?php echo e(asset('/module/user/js/2fa.js')); ?>"></script>
 <?php endif; ?>
-<?php echo $__env->yieldPushContent('js'); ?>
-
-<?php /**PATH C:\Users\MoSamir\Downloads\public_html\public_html\themes/GoTrip/Layout/parts/user/footer.blade.php ENDPATH**/ ?>
+<?php echo $__env->yieldPushContent('js'); ?><?php /**PATH C:\Users\MoSamir\Downloads\public_html\public_html\themes/GoTrip/Layout/parts/user/footer.blade.php ENDPATH**/ ?>
