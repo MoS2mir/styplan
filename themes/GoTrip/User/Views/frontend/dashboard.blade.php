@@ -1,15 +1,6 @@
 @extends('layouts.user')
 @section('content')
-    <div class="bravo-user-dashboard">
-        <div class="row y-gap-20 justify-between items-end pb-60 lg:pb-40 md:pb-32">
-            <div class="col-auto">
-                <h1 class="text-30 lh-14 fw-600">{{ __("Dashboard") }}</h1>
-                <div class="text-15 text-light-1">{{ __("Ready to jump back in?") }}</div>
-            </div>
-            <div class="col-auto">
-            </div>
-        </div>
-
+    <div class="bravo-user-dashboard pt-30">
         @include('admin.message')
 
         <div class="row y-gap-30">
