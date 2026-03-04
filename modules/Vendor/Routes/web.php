@@ -21,6 +21,7 @@ Route::group(['prefix'=>'vendor','middleware' => ['auth']],function(){
     Route::post('/createPayoutRequest','PayoutController@createPayoutRequest')->name("vendor.payout.createPayoutRequest");
 
     Route::get('/booking-report','VendorController@bookingReport')->name("vendor.bookingReport");
+    Route::get('/review-report','VendorController@reviewReport')->name("vendor.reviewReport");
 
     Route::prefix('team')->name('vendor.team.')->group(function(){
         Route::get('/','TeamController@index')->name("index");

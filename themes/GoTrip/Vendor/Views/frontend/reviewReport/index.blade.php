@@ -1,17 +1,17 @@
 @extends('layouts.user')
 @section('content')
     <style>
-        .booking-search-container {
+        .review-search-container {
             margin-bottom: 30px;
             display: flex;
             justify-content: center;
         }
-        .booking-search-wrap {
+        .review-search-wrap {
             position: relative;
             width: 100%;
             max-width: 600px;
         }
-        .booking-search-wrap input {
+        .review-search-wrap input {
             width: 100%;
             padding: 12px 20px 12px 50px;
             border-radius: 50px;
@@ -21,7 +21,7 @@
             font-family: 'Tajawal', 'Cairo', sans-serif;
             box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
-        .booking-search-wrap .search-icon {
+        .review-search-wrap .search-icon {
             position: absolute;
             left: 20px;
             top: 50%;
@@ -30,7 +30,7 @@
             font-size: 18px;
         }
 
-        .booking-report-container {
+        .review-report-container {
             background: #fff;
             border: 1px solid #1f2937;
             border-radius: 20px;
@@ -39,11 +39,11 @@
             direction: rtl;
             font-family: 'Tajawal', 'Cairo', sans-serif;
         }
-        .booking-table {
+        .review-table {
             width: 100%;
             border-collapse: collapse;
         }
-        .booking-table thead th {
+        .review-table thead th {
             padding: 25px 20px;
             font-size: 26px;
             font-weight: 800;
@@ -51,13 +51,13 @@
             text-align: center;
             border-bottom: 1px solid #000;
         }
-        .booking-table tbody td {
+        .review-table tbody td {
             padding: 25px 20px;
             text-align: center;
             vertical-align: middle;
             border-bottom: 1px solid #e5e7eb;
         }
-        .booking-table tbody tr:last-child td {
+        .review-table tbody tr:last-child td {
             border-bottom: none;
         }
         
@@ -89,24 +89,17 @@
             color: #000;
             line-height: 1.4;
         }
-        .arrival-date {
-            font-size: 18px;
-            font-weight: 700;
-            color: #000;
-            line-height: 1.2;
+        
+        .stars-wrap {
+            color: #FFC107;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 2px;
         }
-
-        .status-badge {
-            padding: 10px 25px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 18px;
-            display: inline-block;
-            min-width: 110px;
+        .star-off {
+            color: #E0E0E0;
         }
-        .status-confirmed, .status-paid, .status-completed, .status-publish { background-color: #dcfce7; color: #166534; }
-        .status-cancelled, .status-cancel, .status-draft { background-color: #fee2e2; color: #991b1b; }
-        .status-processing, .status-pending { background-color: #fef3c7; color: #92400e; }
 
         .bravo-pagination {
             display: flex;
@@ -121,49 +114,45 @@
             @include('admin.message')
 
             <!-- Search Bar -->
-            <form action="" method="get" class="booking-search-container">
-                <div class="booking-search-wrap">
-                    <input type="text" name="customer_name" value="{{ request('customer_name') }}" placeholder="البحث">
+            <form action="" method="get" class="review-search-container">
+                <div class="review-search-wrap">
+                    <input type="text" name="s" value="{{ request('s') }}" placeholder="البحث">
                     <i class="fa fa-search search-icon"></i>
                 </div>
             </form>
             
-            @if($bookings->total() > 0)
-                <div class="booking-report-container shadow-sm">
-                    <table class="booking-table">
+            @if($rows->total() > 0)
+                <div class="review-report-container shadow-sm">
+                    <table class="review-table">
                         <thead>
                             <tr>
-                                <th style="width: 25%;">الحالة</th>
-                                <th style="width: 20%;">الوصول</th>
-                                <th style="width: 25%;">العميل</th>
-                                <th style="width: 30%; text-align: right;">العقار</th>
+                                <th style="width: 30%;">العميل</th>
+                                <th style="width: 30%;">التقييم</th>
+                                <th style="width: 40%; text-align: right;">العقار</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($bookings as $booking)
+                            @foreach($rows as $row)
                                 @php 
-                                    $service = $booking->service;
-                                    $status_class = 'status-' . $booking->status;
-                                    $customer = $booking->first_name . ' ' . $booking->last_name;
+                                    $service = $row->getService;
+                                    $author = $row->author;
+                                    $customer_name = $author->display_name ?? ($row->first_name . ' ' . $row->last_name);
                                 @endphp
                                 <tr>
                                     <td>
-                                        <span class="status-badge {{ $status_class }}">
-                                            {{ $booking->statusName }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="arrival-date">
-                                            @if($booking->start_date)
-                                                {{ display_date($booking->start_date) }}
-                                            @else
-                                                -
-                                            @endif
+                                        <div class="customer-name">
+                                            {{ $customer_name }}
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="customer-name">
-                                            {{ $customer }}
+                                        <div class="stars-wrap">
+                                            @for( $i = 0 ; $i < 5 ; $i++ )
+                                                @if($i < $row->rate_number)
+                                                    <i class="fa fa-star"></i>
+                                                @else
+                                                    <i class="fa fa-star star-off"></i>
+                                                @endif
+                                            @endfor
                                         </div>
                                     </td>
                                     <td>
@@ -187,45 +176,13 @@
                 </div>
                 
                 <div class="bravo-pagination">
-                    {{$bookings->appends(request()->query())->links()}}
+                    {{$rows->appends(request()->query())->links()}}
                 </div>
             @else
                 <div class="text-center py-50 bg-white rounded-4 shadow-3 mt-20" style="border: 1px solid #1f2937; border-radius: 20px;">
-                    <h3 class="fw-700">{{__("لا يوجد حجوزات بعد")}}</h3>
+                    <h3 class="fw-700">{{__("لا يوجد تقييمات بعد")}}</h3>
                 </div>
             @endif
         </div>
     </div>
 @endsection
-@push('js')
-    <script>
-        $(document).on('click', '#set_paid_btn', function (e) {
-            var id = $(this).data('id');
-            $.ajax({
-                url:bookingCore.url+'/booking/setPaidAmount',
-                data:{
-                    id: id,
-                    remain: $('#modal-paid-'+id+' #set_paid_input').val(),
-                },
-                dataType:'json',
-                type:'post',
-                success:function(res){
-                    alert(res.message);
-                    window.location.reload();
-                }
-            });
-        });
-        jQuery(function ($){
-            $('#modal_booking_detail').on('show.bs.modal',function (e){
-                var btn = $(e.relatedTarget);
-                $(this).find('.user_id').html(btn.data('id'));
-                $(this).find('.modal-body').html('<div class="d-flex justify-content-center">{{__("Loading...")}}</div>');
-                var modal = $(this);
-                $.get(btn.data('ajax'), function (html){
-                        modal.find('.modal-body').html(html);
-                    }
-                )
-            })
-        })
-    </script>
-@endpush

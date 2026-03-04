@@ -58,7 +58,7 @@
             padding-right: 0 !important;
             margin-left: auto !important;
             margin-right: auto !important;
-            max-width: 1000px;
+            max-width: 1200px;
         }
 
         .dashboard__content {
@@ -74,12 +74,12 @@
                 class="{{ request()->routeIs('space.vendor.index') ? 'active' : '' }}">إدارة العقارات</a>
             <a href="{{ route('space.vendor.create') }}"
                 class="{{ request()->routeIs('space.vendor.create') ? 'active' : '' }}">إضافة عقار آخر</a>
-            <a href="{{ route('user.booking_history') }}"
-                class="{{ request()->routeIs('user.booking_history') ? 'active' : '' }}">الحجوزات</a>
-            <a href="{{ url('/user/reviews') }}" class="{{ request()->is('user/reviews') ? 'active' : '' }}">التقييمات</a>
+            <a href="{{ route('vendor.bookingReport') }}"
+                class="{{ request()->routeIs('vendor.bookingReport') ? 'active' : '' }}">الحجوزات</a>
+            <a href="{{ route('vendor.reviewReport') }}" class="{{ request()->routeIs('vendor.reviewReport') ? 'active' : '' }}">التقييمات</a>
         </div>
 
-        @if(request()->routeIs('vendor.dashboard') || request()->routeIs('space.vendor.index') || request()->routeIs('space.vendor.create') || request()->routeIs('user.booking_history') || request()->is('user/reviews'))
+        @if(request()->routeIs('vendor.dashboard') || request()->routeIs('space.vendor.create') || request()->routeIs('user.booking_history') || request()->routeIs('vendor.reviewReport') || request()->is('user/reviews'))
             <div class="d-flex justify-content-center flex-wrap" style="gap: 30px; margin-bottom: 40px; margin-top: -10px;">
                 <!-- Card 3: Notifications -->
                 <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
@@ -217,7 +217,7 @@
             padding-right: 0 !important;
             margin-left: auto !important;
             margin-right: auto !important;
-            max-width: 1000px;
+            max-width: 1200px;
         }
 
         .dashboard__content {

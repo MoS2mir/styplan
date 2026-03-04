@@ -156,4 +156,28 @@ class VendorController extends FrontendController
         ];
         return view('Vendor::frontend.bookingReport.index', $data);
     }
+
+    public function reviewReport(Request $request)
+    {
+        $model = \Modules\Review\Models\Review::query();
+        $model->where('vendor_id', Auth::id());
+        $model->orderBy('id', 'desc');
+
+        if (!empty($search = $request->input('s'))) {
+            $search = "%".$search."%";
+            $model->whereRaw(" ( title LIKE ? OR content LIKE ? ) ",[$search,$search]);
+        }
+
+        $data = [
+            'rows'        => $model->paginate(10),
+            'page_title'  => __("Review Report"),
+            'breadcrumbs' => [
+                [
+                    'name'  => __('Review Report'),
+                    'class' => 'active'
+                ],
+            ],
+        ];
+        return view('Vendor::frontend.reviewReport.index', $data);
+    }
 }
