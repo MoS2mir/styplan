@@ -58,11 +58,19 @@ class Review extends BaseModel
         }
     }
 
-    public function getService()
+    public function service()
     {
         $allServices = get_reviewable_services();
-        $module = $allServices[$this->object_model];
-        return $this->belongsTo($module, 'object_id');
+        $module = $allServices[$this->object_model] ?? null;
+        if ($module and class_exists($module)) {
+            return $this->belongsTo($module, 'object_id');
+        }
+        return $this->belongsTo(\Modules\Space\Models\Space::class, 'object_id')->whereRaw("1 = 0");
+    }
+
+    public function getService()
+    {
+        return $this->service();
     }
 
     public function getReviewMeta()

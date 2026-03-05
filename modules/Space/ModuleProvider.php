@@ -45,13 +45,13 @@ class ModuleProvider extends ModuleServiceProvider
             'space' => [
                 "position" => 41,
                 'url' => route('space.admin.index'),
-                'title' => __('استراحات وشاليهات'),
-                'icon' => 'fa fa-umbrella',
+                'title' => __('جميع العقارات'),
+                'icon' => 'fa fa-home',
                 'permission' => 'space_view',
                 'children' => [
                     'add' => [
                         'url' => route('space.admin.index'),
-                        'title' => __('كل الاستراحات والشاليهات'),
+                        'title' => __('كل العقارات'),
                         'permission' => 'space_view',
                     ],
                     'create' => [
@@ -96,7 +96,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'space' => [
                 'class' => Space::class ,
-                'name' => __("استراحات وشاليهات"),
+                'name' => __("جميع العقارات"),
                 'items' => Space::searchForMenu(),
                 'position' => 41
             ]
@@ -109,14 +109,14 @@ class ModuleProvider extends ModuleServiceProvider
         if (Space::isEnable()) {
             $res['space'] = [
                 'url' => route('space.vendor.index'),
-                'title' => __("إدارة استراحات وشاليهات"),
+                'title' => __("إدارة كل العقارات"),
                 'icon' => Space::getServiceIconFeatured(),
                 'position' => 50,
                 'permission' => 'space_view',
                 'children' => [
                     [
                         'url' => route('space.vendor.index'),
-                        'title' => __("كل الاستراحات والشاليهات"),
+                        'title' => __("كل العقارات"),
                     ],
                     [
                         'url' => route('space.vendor.create'),

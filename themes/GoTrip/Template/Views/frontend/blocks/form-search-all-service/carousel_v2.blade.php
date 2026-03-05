@@ -164,7 +164,7 @@
                         <p data-anim-child="slide-up delay-3" class="z-2 text-white mt-20" style="text-align: right;">{{$sub_title ?? ''}}</p>
                         @if(empty($hide_form_search))
                             <div data-anim-child="slide-up delay-4" class="search-pill-container" style="direction: rtl;">
-                                <form action="{{ route('hotel.search') }}" method="get" class="w-100">
+                                <form action="{{ route('space.search') }}" method="get" class="w-100">
                                     <div class="search-pill-inner">
                                         {{-- Search Button (Rightmost in RTL) --}}
                                         <button class="pill-submit-btn" type="submit">
@@ -192,13 +192,39 @@
                                             </div>
 
                                             {{-- التصنيف (Category/Location) --}}
-                                            {{-- I will use a simple dropdown format similar to location field but with 'Classification' label --}}
                                             <div class="pill-item searchMenu-loc js-form-dd js-liverSearch">
                                                 <div data-x-dd-click="searchMenu-loc">
                                                     <h4>التصنيف</h4>
                                                     <div class="val">
-                                                        <input type="hidden" name="location_id" class="js-search-get-id" value="">
+                                                        <input type="hidden" name="terms[]" class="js-search-get-id" value="">
                                                         <input type="text" autocomplete="off" readonly class="parent_text js-search js-dd-focus" style="border:none; padding:0; background:transparent; font-size:14px; color:#5E6D77; width:100%;" placeholder="اختر التصنيف">
+                                                    </div>
+                                                </div>
+                                                <div class="searchMenu-loc__field shadow-2 js-liverSearch-drop-down" data-x-dd="searchMenu-loc" data-x-dd-toggle="-is-active">
+                                                    <div class="bg-white px-30 py-30 rounded-4">
+                                                        <div class="y-gap-5 js-results">
+                                                            @php
+                                                                $categoryAttr = \Modules\Core\Models\Attributes::where('service', 'space')
+                                                                    ->where(function($q){
+                                                                        $q->where('name', 'LIKE', '%نوع العقار%')
+                                                                          ->orWhere('name', 'LIKE', '%نوع المساحة%')
+                                                                          ->orWhere('slug', 'property-type')
+                                                                          ->orWhere('slug', 'space-type');
+                                                                    })->with('terms')->first();
+                                                                
+                                                                $terms = $categoryAttr ? $categoryAttr->terms : [];
+                                                            @endphp
+                                                            @foreach($terms as $term)
+                                                                <div class="item" onclick="document.querySelector('input[name=\'terms[]\']').value = '{{$term->id}}'; document.querySelector('.parent_text').value = '{{$term->name}}';">
+                                                                    <div class="d-flex items-center">
+                                                                        <div class="icon-location-2 text-light-1 text-20"></div>
+                                                                        <div class="ml-15">
+                                                                            <div class="text-15 fw-500 js-search-option-target">{{$term->name}}</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

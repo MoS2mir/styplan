@@ -10,7 +10,7 @@ class FormSearchSpace extends BaseBlock
 
     public function getName()
     {
-        return __('استراحات وشاليهات: نموذج البحث');
+        return __('نموذج بحث العقارات');
     }
 
     public function getOptions()

@@ -1,4 +1,5 @@
 @if(Auth::user()->hasPermission('dashboard_vendor_access'))
+    @if(!request()->routeIs('space.vendor.create'))
     <style>
         .vendor-nav-pill {
             background-color: #fff;
@@ -65,53 +66,56 @@
             background-color: #f5f7f9 !important;
         }
     </style>
+    @endif
 
-    <div class="text-center">
-        <div class="vendor-nav-pill">
-            <a href="{{ route('vendor.dashboard') }}"
-                class="{{ request()->routeIs('vendor.dashboard') ? 'active' : '' }}">الصفحة الرئيسية</a>
-            <a href="{{ route('space.vendor.index') }}"
-                class="{{ request()->routeIs('space.vendor.index') ? 'active' : '' }}">إدارة العقارات</a>
-            <a href="{{ route('space.vendor.create') }}"
-                class="{{ request()->routeIs('space.vendor.create') ? 'active' : '' }}">إضافة عقار آخر</a>
-            <a href="{{ route('vendor.bookingReport') }}"
-                class="{{ request()->routeIs('vendor.bookingReport') ? 'active' : '' }}">الحجوزات</a>
-            <a href="{{ route('vendor.reviewReport') }}" class="{{ request()->routeIs('vendor.reviewReport') ? 'active' : '' }}">التقييمات</a>
-        </div>
-
-        @if(request()->routeIs('vendor.dashboard') || request()->routeIs('space.vendor.create') || request()->routeIs('user.booking_history') || request()->routeIs('vendor.reviewReport') || request()->is('user/reviews'))
-            <div class="d-flex justify-content-center flex-wrap" style="gap: 30px; margin-bottom: 40px; margin-top: -10px;">
-                <!-- Card 3: Notifications -->
-                <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
-                    style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
-                    <span class="mb-3"
-                        style="font-size: 24px; font-weight: 800; color: #111;">{{ Auth::user()->unreadNotifications ? Auth::user()->unreadNotifications->count() : 0 }}</span>
-                    <span
-                        style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">الإشعارات</span>
-                </div>
-
-                <!-- Card 2: Spaces -->
-                <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
-                    style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
-                    <span class="mb-3"
-                        style="font-size: 24px; font-weight: 800; color: #111;">{{ \Modules\Space\Models\Space::where('status', 'publish')->where("create_user", Auth::id())->count('id') }}</span>
-                    <span
-                        style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">عدد
-                        العقارات</span>
-                </div>
-
-                <!-- Card 1: Books -->
-                <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
-                    style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
-                    <span class="mb-3"
-                        style="font-size: 24px; font-weight: 800; color: #111;">{{ \Modules\Booking\Models\Booking::whereNotIn('status', \Modules\Booking\Models\Booking::$notAcceptedStatus)->where("vendor_id", Auth::id())->count('id') }}</span>
-                    <span
-                        style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">عدد
-                        الحجوزات</span>
-                </div>
+    @if(!request()->routeIs('space.vendor.create'))
+        <div class="text-center">
+            <div class="vendor-nav-pill">
+                <a href="{{ route('vendor.dashboard') }}"
+                    class="{{ request()->routeIs('vendor.dashboard') ? 'active' : '' }}">الصفحة الرئيسية</a>
+                <a href="{{ route('space.vendor.index') }}"
+                    class="{{ request()->routeIs('space.vendor.index') ? 'active' : '' }}">إدارة العقارات</a>
+                <a href="{{ route('space.vendor.create') }}"
+                    class="{{ request()->routeIs('space.vendor.create') ? 'active' : '' }}">إضافة عقار آخر</a>
+                <a href="{{ route('vendor.bookingReport') }}"
+                    class="{{ request()->routeIs('vendor.bookingReport') ? 'active' : '' }}">الحجوزات</a>
+                <a href="{{ route('vendor.reviewReport') }}" class="{{ request()->routeIs('vendor.reviewReport') ? 'active' : '' }}">التقييمات</a>
             </div>
-        @endif
-    </div>
+
+            @if(request()->routeIs('vendor.dashboard') || request()->routeIs('space.vendor.create') || request()->routeIs('user.booking_history') || request()->routeIs('vendor.reviewReport') || request()->is('user/reviews'))
+                <div class="d-flex justify-content-center flex-wrap" style="gap: 30px; margin-bottom: 40px; margin-top: -10px;">
+                    <!-- Card 3: Notifications -->
+                    <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
+                        style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
+                        <span class="mb-3"
+                            style="font-size: 24px; font-weight: 800; color: #111;">{{ Auth::user()->unreadNotifications ? Auth::user()->unreadNotifications->count() : 0 }}</span>
+                        <span
+                            style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">الإشعارات</span>
+                    </div>
+
+                    <!-- Card 2: Spaces -->
+                    <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
+                        style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
+                        <span class="mb-3"
+                            style="font-size: 24px; font-weight: 800; color: #111;">{{ \Modules\Space\Models\Space::where('status', 'publish')->where("create_user", Auth::id())->count('id') }}</span>
+                        <span
+                            style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">عدد
+                            العقارات</span>
+                    </div>
+
+                    <!-- Card 1: Books -->
+                    <div class="bg-white text-center d-flex flex-column justify-content-center align-items-center"
+                        style="width: 160px; height: 130px; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.06); border: 1px solid #f3f4f6;">
+                        <span class="mb-3"
+                            style="font-size: 24px; font-weight: 800; color: #111;">{{ \Modules\Booking\Models\Booking::whereNotIn('status', \Modules\Booking\Models\Booking::$notAcceptedStatus)->where("vendor_id", Auth::id())->count('id') }}</span>
+                        <span
+                            style="font-size: 15px; font-weight: 700; color: #000; font-family: 'Tajawal', 'Cairo', sans-serif;">عدد
+                            الحجوزات</span>
+                    </div>
+                </div>
+            @endif
+        </div>
+    @endif
 @else
     <div class="top-profile-card text-center">
         <h2

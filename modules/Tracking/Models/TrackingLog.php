@@ -49,10 +49,10 @@ class TrackingLog extends Model
     {
         $all = get_bookable_services();
         $all['campaign'] = Campaign::class;
-        if ($this->object_model and !empty($all[$this->object_model])) {
+        if ($this->object_model and !empty($all[$this->object_model]) and class_exists($all[$this->object_model])) {
             return $this->hasOne($all[$this->object_model], 'id', 'object_id');
         }
-        return $this->hasOne(Tour::class,'id','object_id');
+        return $this->hasOne(\Modules\Space\Models\Space::class, 'id', 'object_id')->whereRaw("1 = 0");
     }
 
     public static function search($filters = []){

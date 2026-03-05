@@ -179,10 +179,10 @@ class Service extends BaseModel
     public function service()
     {
         $all = get_bookable_services();
-        if ($this->object_model and !empty($all[$this->object_model])) {
+        if ($this->object_model and !empty($all[$this->object_model]) and class_exists($all[$this->object_model])) {
             return $this->hasOne($all[$this->object_model], 'id', 'object_id');
         }
-        return null;
+        return $this->hasOne(\Modules\Space\Models\Space::class, 'id', 'object_id')->whereRaw("1 = 0");
     }
 }
 

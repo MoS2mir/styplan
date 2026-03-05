@@ -1,0 +1,205 @@
+.stayplan-add-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Tajawal', sans-serif;
+}
+
+.stayplan-banner {
+    background: #1a2332;
+    border-radius: 20px;
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.stayplan-banner .logo-text {
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stayplan-banner .logo-text i {
+    font-size: 28px;
+}
+
+.stayplan-banner .sub-text {
+    color: #cbd5e0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.stayplan-banner .shape {
+    position: absolute;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.stayplan-banner .shape-1 {
+    top: -20px;
+    left: -20px;
+    width: 100px;
+}
+
+.stayplan-banner .shape-2 {
+    bottom: -20px;
+    right: -20px;
+    width: 120px;
+}
+
+.stayplan-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
+}
+
+.stayplan-card-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 30px;
+}
+
+.stayplan-form-name {
+    margin-bottom: 40px;
+}
+
+.stayplan-input {
+    width: 100%;
+    border: 1px solid #cbd5e0;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stayplan-input:focus {
+    border-color: #1a2332;
+    box-shadow: 0 0 0 3px rgba(26, 35, 50, 0.1);
+    outline: none;
+}
+
+.stayplan-separator {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 30px auto;
+    width: 60%;
+}
+
+.stayplan-section-title {
+    text-align: right;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 25px;
+}
+
+.stayplan-categories {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+}
+
+.stayplan-cat-card {
+    width: 130px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stayplan-cat-img-wrapper {
+    width: 130px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.stayplan-cat-card.active .stayplan-cat-img-wrapper {
+    border-color: #1a2332;
+    transform: translateY(-5px);
+}
+
+.stayplan-cat-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.stayplan-cat-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.stayplan-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 40px;
+}
+
+.stayplan-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e2e8f0;
+}
+
+.stayplan-dot.active {
+    background: #1a2332;
+}
+
+.stayplan-nav-btns {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.stayplan-btn {
+    padding: 12px 60px;
+    border-radius: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.stayplan-btn-next {
+    background: #1a2332;
+    color: white;
+}
+
+.stayplan-btn-prev {
+    background: white;
+    color: #1a2332;
+    border: 1.5px solid #cbd5e0;
+}
+
+.stayplan-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

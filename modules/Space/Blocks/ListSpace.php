@@ -15,7 +15,7 @@ class ListSpace extends BaseBlock
 
     public function getName()
     {
-        return __('استراحات وشاليهات: قائمة العناصر');
+        return __('قائمة العقارات');
     }
 
     public function getOptions()

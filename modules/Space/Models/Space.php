@@ -92,7 +92,7 @@ class Space extends Bookable
 
     public static function getModelName()
     {
-        return __("استراحات وشاليهات");
+        return __("جميع العقارات");
     }
 
     /**
@@ -102,7 +102,7 @@ class Space extends Bookable
      */
     static public function getSeoMetaForPageList()
     {
-        $meta['seo_title'] = __("ابحث عن استراحات وشاليهات");
+        $meta['seo_title'] = __("ابحث عن عقارات");
         if (!empty($title = setting_item_with_lang("space_page_list_seo_title", false))) {
             $meta['seo_title'] = $title;
         }
