@@ -127,6 +127,79 @@
                     margin-right: 10px;
                 }
             }
+
+            /* Custom StayPlan Search Dropdown */
+            .stayplan-search-dropdown {
+                background: white !important;
+                border-radius: 35px !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                width: 320px !important;
+                border: 1px solid #eee !important;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+            }
+            .stayplan-search-header {
+                padding: 25px 20px 15px 20px;
+                text-align: center;
+            }
+            .stayplan-search-header h5 {
+                font-size: 22px !important;
+                font-weight: 900 !important;
+                color: #1a2332 !important;
+                margin-bottom: 15px !important;
+            }
+            .stayplan-search-separator {
+                height: 1px;
+                background: #eee;
+                width: 70%;
+                margin: 0 auto;
+            }
+            .stayplan-search-list {
+                display: flex;
+                flex-direction: column;
+            }
+            .stayplan-search-item {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 20px 30px !important;
+                border-bottom: 1px solid #f0f0f0 !important;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none !important;
+            }
+            .stayplan-search-item:last-child {
+                border-bottom: none !important;
+            }
+            .stayplan-search-item:hover {
+                background: #f8fafc !important;
+            }
+            .stayplan-search-item .item-text {
+                font-size: 18px !important;
+                font-weight: 700 !important;
+                color: #1a2332 !important;
+                flex: 1;
+                text-align: right;
+            }
+            .stayplan-search-item .item-icon {
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                margin-left: 0;
+                margin-right: 15px;
+            }
+            .stayplan-search-item .item-icon i {
+                font-size: 28px;
+                color: #1a2332;
+            }
+            
+            /* Hide default shadow if active */
+            .searchMenu-loc__field.shadow-2 {
+                box-shadow: none !important;
+            }
         </style>
 
         <div class="masthead__content">
@@ -200,31 +273,43 @@
                                                         <input type="text" autocomplete="off" readonly class="parent_text js-search js-dd-focus" style="border:none; padding:0; background:transparent; font-size:14px; color:#5E6D77; width:100%;" placeholder="اختر التصنيف">
                                                     </div>
                                                 </div>
-                                                <div class="searchMenu-loc__field shadow-2 js-liverSearch-drop-down" data-x-dd="searchMenu-loc" data-x-dd-toggle="-is-active">
-                                                    <div class="bg-white px-30 py-30 rounded-4">
-                                                        <div class="y-gap-5 js-results">
+                                                <div class="searchMenu-loc__field shadow-2 js-liverSearch-drop-down stayplan-search-dropdown" data-x-dd="searchMenu-loc" data-x-dd-toggle="-is-active">
+                                                    <div class="stayplan-search-header">
+                                                        <h5>التصنيفات</h5>
+                                                        <div class="stayplan-search-separator"></div>
+                                                    </div>
+                                                    <div class="stayplan-search-list js-results">
+                                                        @php
+                                                            $categoryAttr = \Modules\Core\Models\Attributes::with('terms')->find(3);
+                                                            $terms = $categoryAttr ? $categoryAttr->terms : [];
+                                                            
+                                                            $iconMap = [
+                                                                'شقق' => 'fa-house-user',
+                                                                'بيوت' => 'fa-house-user',
+                                                                'مخيم' => 'fa-campground',
+                                                                'مزارع' => 'fa-tractor',
+                                                                'مزرعة' => 'fa-tractor',
+                                                                'استراحات' => 'fa-swimming-pool',
+                                                                'شاليه' => 'fa-swimming-pool'
+                                                            ];
+                                                        @endphp
+                                                        @foreach($terms as $term)
                                                             @php
-                                                                $categoryAttr = \Modules\Core\Models\Attributes::where('service', 'space')
-                                                                    ->where(function($q){
-                                                                        $q->where('name', 'LIKE', '%نوع العقار%')
-                                                                          ->orWhere('name', 'LIKE', '%نوع المساحة%')
-                                                                          ->orWhere('slug', 'property-type')
-                                                                          ->orWhere('slug', 'space-type');
-                                                                    })->with('terms')->first();
-                                                                
-                                                                $terms = $categoryAttr ? $categoryAttr->terms : [];
+                                                                $icon = 'fa-home'; // Default
+                                                                foreach($iconMap as $key => $val) {
+                                                                    if(strpos($term->name, $key) !== false) {
+                                                                        $icon = $val;
+                                                                        break;
+                                                                    }
+                                                                }
                                                             @endphp
-                                                            @foreach($terms as $term)
-                                                                <div class="item" onclick="document.querySelector('input[name=\'terms[]\']').value = '{{$term->id}}'; document.querySelector('.parent_text').value = '{{$term->name}}';">
-                                                                    <div class="d-flex items-center">
-                                                                        <div class="icon-location-2 text-light-1 text-20"></div>
-                                                                        <div class="ml-15">
-                                                                            <div class="text-15 fw-500 js-search-option-target">{{$term->name}}</div>
-                                                                        </div>
-                                                                    </div>
+                                                            <div class="stayplan-search-item" onclick="document.querySelector('input[name=\'terms[]\']').value = '{{$term->id}}'; document.querySelector('.parent_text').value = '{{$term->name}}';">
+                                                                <div class="item-text">{{$term->name}}</div>
+                                                                <div class="item-icon">
+                                                                    <i class="fa {{$icon}}"></i>
                                                                 </div>
-                                                            @endforeach
-                                                        </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
                                                 </div>
                                             </div>
