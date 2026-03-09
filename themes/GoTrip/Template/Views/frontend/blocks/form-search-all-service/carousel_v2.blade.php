@@ -1,4 +1,4 @@
-<section data-anim-wrap class="masthead -type-2 js-mouse-move-container" style="height: 732px !important; min-height: 732px !important; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; overflow: hidden; position: relative;">
+<section data-anim-wrap class="masthead -type-2" style="height: 732px !important; min-height: 732px !important; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; overflow: visible !important; position: relative;">
     <div class="masthead__bg bg-dark-3" style="height: 100%; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px; overflow: hidden;">
         <img src="{{ $bg_image_url }}" alt="image" data-src="{{ $bg_image_url }}" class="js-lazy" style="height: 100%; width: 100%; object-fit: cover; border-bottom-right-radius: 50px; border-bottom-left-radius: 50px;">
     </div>
@@ -8,7 +8,7 @@
         <style>
             .search-pill-container {
                 position: relative;
-                z-index: 10;
+                z-index: 100 !important;
                 margin-top: 40px;
                 max-width: 650px;
                 width: 100%;
@@ -52,7 +52,7 @@
             }
             
             .pill-items-row {
-                flex: 1;
+                flex: 2.2 !important; /* Increase space for the two dates */
                 display: flex !important;
                 align-items: center;
                 height: 100%;
@@ -64,36 +64,43 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                padding: 0 20px;
+                padding: 0 10px; /* Reduced padding to save horizontal space */
                 border-left: 1px solid #E5E7EB;
                 cursor: pointer;
                 position: relative;
+            }
+            .searchMenu-loc {
+                flex: 0.8 !important; /* Shrink Category as requested */
+            }
+            .searchMenu-guests {
+                flex: 0.8 !important; /* Shrink Guests as requested */
             }
             .pill-item:last-child {
                 border-left: none;
             }
             .pill-item h4 {
+                font-family: 'Inter', sans-serif !important;
+                font-weight: 500 !important;
                 font-size: 16px !important;
-                font-weight: 700 !important;
-                color: #1A2B48 !important;
-                margin-bottom: 2px !important;
+                line-height: 100% !important;
+                letter-spacing: 0% !important;
+                text-align: center !important;
+                color: #00000080 !important;
+                margin: 0 !important;
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 15px;
+                justify-content: center;
             }
-            .pill-item h4::after {
-                content: "\f107";
-                font-family: "Font Awesome 5 Free";
-                font-weight: 900;
-                font-size: 14px;
+            /* Styling for the dropdown icons in the header */
+            .pill-item h4 i {
+                font-size: 18px;
                 color: #5E6D77;
+                opacity: 0.7;
+                font-weight: 900 !important;
             }
             .pill-item .val {
-                font-size: 14px !important;
-                color: #5E6D77 !important;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                display: none !important;
             }
 
             @media (max-width: 991px) {
@@ -130,6 +137,9 @@
 
             /* Custom StayPlan Search Dropdown */
             .stayplan-search-dropdown {
+                position: absolute !important;
+                top: 100% !important;
+                right: 0 !important;
                 background: white !important;
                 border-radius: 35px !important;
                 padding: 0 !important;
@@ -137,6 +147,11 @@
                 width: 320px !important;
                 border: 1px solid #eee !important;
                 box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+                z-index: 9999 !important;
+                display: none;
+            }
+            .stayplan-search-dropdown.-is-active {
+                display: block !important;
             }
             .stayplan-search-header {
                 padding: 25px 20px 15px 20px;
@@ -196,9 +211,219 @@
                 color: #1a2332;
             }
             
+            /* Custom StayPlan Guests Dropdown Styling */
+            .stayplan-guests-dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 280px;
+                background: white;
+                border-radius: 30px;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+                z-index: 1000;
+                padding: 25px 0 10px 0;
+                display: none;
+                margin-top: 15px;
+                overflow: hidden;
+            }
+            .stayplan-guests-dropdown.-is-active {
+                display: block !important;
+            }
+            .stayplan-guests-header {
+                padding: 0 25px 15px 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+            }
+            .stayplan-guests-header h5 {
+                font-size: 18px;
+                font-weight: 800;
+                color: #1a2332;
+                margin: 0;
+            }
+            .stayplan-guests-header i {
+                font-size: 22px;
+                color: #1a2332;
+            }
+            .stayplan-guests-separator {
+                height: 1px;
+                background: #eee;
+                margin: 0 25px 10px 25px;
+            }
+            .stayplan-guests-item {
+                padding: 15px 25px;
+                text-align: center;
+                font-size: 18px;
+                font-weight: 700;
+                color: #1a2332;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                border-top: 1px solid #f0f0f0;
+            }
+            .stayplan-guests-item:first-child {
+                border-top: none;
+            }
+            .stayplan-guests-item:hover {
+                background: #f8fafc;
+            }
+            .stayplan-guests-item.active {
+                background: #f1f5f9;
+            }
+            
             /* Hide default shadow if active */
             .searchMenu-loc__field.shadow-2 {
                 box-shadow: none !important;
+            }
+
+            /* Custom StayPlan Daterangepicker Styling - Final Fixes */
+            .daterangepicker {
+                border-radius: 30px !important;
+                border: 1px solid #f0f0f0 !important;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
+                padding: 30px !important;
+                font-family: 'Tajawal', sans-serif !important;
+                width: 467px !important;
+                height: 413px !important;
+                direction: rtl !important;
+                margin-top: 15px !important;
+                background: #fff !important;
+                display: none;
+            }
+            .daterangepicker:before, .daterangepicker:after {
+                display: none !important;
+            }
+
+            /* Force SINGLE calendar layout and hide second month */
+            .daterangepicker .drp-calendar.right {
+                display: none !important;
+            }
+            .daterangepicker .drp-calendar.left {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                float: none !important;
+                display: block !important;
+            }
+            .daterangepicker .calendar-table {
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            .daterangepicker .calendar-table table {
+                width: 100% !important;
+                table-layout: fixed !important; /* Forces 7 columns to be equal and visible */
+                border-spacing: 0 !important;
+                border-collapse: collapse !important;
+            }
+            .daterangepicker .calendar-table th, .daterangepicker .calendar-table td {
+                font-family: 'Tajawal', sans-serif !important;
+                font-weight: 600 !important;
+                font-size: 15px !important;
+                color: #1a2332 !important;
+                border: none !important;
+                height: 45px !important;
+                line-height: 45px !important;
+                text-align: center !important;
+                vertical-align: middle !important;
+                padding: 0 !important;
+            }
+
+            /* Month and Year Header */
+            .daterangepicker th.month {
+                font-size: 20px !important;
+                font-weight: 800 !important;
+                color: #1a2332 !important;
+                padding: 0 0 20px 0 !important;
+                width: 100% !important;
+            }
+
+            /* Arrows Design */
+            .daterangepicker .calendar-table .prev, 
+            .daterangepicker .calendar-table .next {
+                background: #ffffff !important;
+                background-image: none !important; /* Hide library default background */
+                border: 1px solid #f0f0f0 !important;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 50% !important;
+                cursor: pointer !important;
+                position: relative !important;
+            }
+            .daterangepicker .calendar-table .prev:after, 
+            .daterangepicker .calendar-table .next:after,
+            .daterangepicker .calendar-table .prev:before,
+            .daterangepicker .calendar-table .next:before {
+                display: none !important;
+                content: none !important;
+            }
+            .daterangepicker .calendar-table .prev span, 
+            .daterangepicker .calendar-table .next span {
+                border-color: #1a2332 !important;
+                border-width: 0 2.5px 2.5px 0 !important;
+                padding: 4px !important;
+                display: block !important;
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                background: none !important;
+                color: transparent !important;
+            }
+            .daterangepicker .calendar-table .prev span {
+                transform: translate(-70%, -50%) rotate(-45deg) !important;
+            }
+            .daterangepicker .calendar-table .next span {
+                transform: translate(-30%, -50%) rotate(135deg) !important;
+            }
+
+            /* Days Headers */
+            .daterangepicker thead tr:last-child {
+                border-top: 1px solid #eee !important;
+            }
+            .daterangepicker thead tr:last-child th {
+                padding: 15px 0 !important;
+                color: #1a2332 !important;
+                font-weight: 700 !important;
+                font-size: 14px !important;
+            }
+
+            /* Day Cells Interaction */
+            .daterangepicker td.available:hover {
+                background-color: #f8fafc !important;
+                border-radius: 50% !important;
+            }
+            .daterangepicker td.active, .daterangepicker td.active:hover {
+                background-color: #1a2332 !important;
+                color: #fff !important;
+                border-radius: 50% !important;
+            }
+            .daterangepicker td.off {
+                color: #cbd5e0 !important;
+                opacity: 0.5;
+            }
+            .daterangepicker td.in-range {
+                background-color: #f1f5f9 !important;
+                border-radius: 0 !important;
+            }
+
+            @media (max-width: 767px) {
+                .daterangepicker {
+                    width: 320px !important;
+                    min-width: 320px !important;
+                    height: auto !important;
+                    padding: 20px !important;
+                    flex-direction: column !important;
+                }
+                .daterangepicker .drp-calendar {
+                    width: 100% !important;
+                }
+                .daterangepicker .calendar-table th, .daterangepicker .calendar-table td {
+                    width: 38px !important;
+                    height: 38px !important;
+                    line-height: 38px !important;
+                }
             }
         </style>
 
@@ -222,7 +447,7 @@
                                     }
                             @endphp
                             <div data-anim-child="slide-up delay-6" style="{{ $container_style }}">
-                                <img src="{{ $img }}" alt="image" class="js-mouse-move" data-move="30" style="{{ $img_style }}">
+                                <img src="{{ $img }}" alt="image" style="{{ $img_style }}">
                             </div>
                         @endforeach
                     </div>
@@ -244,33 +469,44 @@
                                             <i class="icon-search"></i>
                                         </button>
 
-                                        <div class="pill-items-row">
-                                            {{-- تاریخ الوصول (Arrival) --}}
-                                            <div class="pill-item searchMenu-date">
-                                                <div class="date-wrapper" data-x-dd-click="searchMenu-date">
-                                                    <h4>تاريخ الوصول</h4>
-                                                    <div class="val js-first-date render check-in-render">{{Request::query('start',display_date(strtotime("today")))}}</div>
+                                            <div class="pill-items-row">
+                                                {{-- تاريخ الوصول (Arrival) --}}
+                                                <div class="pill-item searchMenu-date form-date-search is_single_picker">
+                                                    <div class="date-wrapper" data-x-dd-click="searchMenu-date">
+                                                        <h4>
+                                                            <i class="fa fa-angle-down"></i>
+                                                            تاريخ الوصول
+                                                        </h4>
+                                                        <div class="val js-first-date render check-in-render" style="display:none !important;">{{Request::query('start',display_date(strtotime("today")))}}</div>
+                                                    </div>
+                                                    <input type="hidden" class="check-in-input" value="" name="start">
+                                                    <input type="text" class="check-in-out absolute invisible" name="date_start" value="">
                                                 </div>
-                                                <input type="hidden" class="check-in-input" value="{{Request::query('start',display_date(strtotime("today")))}}" name="start">
-                                            </div>
 
-                                            {{-- تاریخ المغادرة (Departure) --}}
-                                            <div class="pill-item searchMenu-date">
-                                                <div class="date-wrapper" data-x-dd-click="searchMenu-date">
-                                                    <h4>تاريخ المغادرة</h4>
-                                                    <div class="val js-last-date render check-out-render">{{Request::query('end',display_date(strtotime("+1 day")))}}</div>
+                                                {{-- تاريخ المغادرة (Departure) --}}
+                                                <div class="pill-item searchMenu-date form-date-search is_single_picker">
+                                                    <div class="date-wrapper" data-x-dd-click="searchMenu-date">
+                                                        <h4>
+                                                            <i class="fa fa-angle-down"></i>
+                                                            تاريخ المغادرة
+                                                        </h4>
+                                                        <div class="val js-last-date render check-out-render" style="display:none !important;">{{Request::query('end',display_date(strtotime("+1 day")))}}</div>
+                                                    </div>
+                                                    <input type="hidden" class="check-out-input" value="" name="end">
+                                                    <input type="text" class="check-in-out absolute invisible" name="date_end" value="">
                                                 </div>
-                                                <input type="hidden" class="check-out-input" value="{{Request::query('end',display_date(strtotime("+1 day")))}}" name="end">
-                                                <input type="text" class="check-in-out absolute invisible" name="date" value="{{Request::query('date',date("Y-m-d")." - ".date("Y-m-d",strtotime("+1 day")))}}">
                                             </div>
 
                                             {{-- التصنيف (Category/Location) --}}
                                             <div class="pill-item searchMenu-loc js-form-dd js-liverSearch">
                                                 <div data-x-dd-click="searchMenu-loc">
-                                                    <h4>التصنيف</h4>
-                                                    <div class="val">
+                                                    <h4>
+                                                        <i class="fa fa-angle-down"></i>
+                                                        التصنيف
+                                                    </h4>
+                                                    <div class="val" style="display:none !important;">
                                                         <input type="hidden" name="terms[]" class="js-search-get-id" value="">
-                                                        <input type="text" autocomplete="off" readonly class="parent_text js-search js-dd-focus" style="border:none; padding:0; background:transparent; font-size:14px; color:#5E6D77; width:100%;" placeholder="اختر التصنيف">
+                                                        <input type="text" autocomplete="off" readonly class="parent_text js-search js-dd-focus" style="border:none; padding:0; background:transparent; font-size:14px; color:#5E6D77; width:100%;" placeholder="">
                                                     </div>
                                                 </div>
                                                 <div class="searchMenu-loc__field shadow-2 js-liverSearch-drop-down stayplan-search-dropdown" data-x-dd="searchMenu-loc" data-x-dd-toggle="-is-active">
@@ -315,46 +551,32 @@
                                             </div>
 
                                             {{-- عدد الاشخاص (Guests) --}}
-                                            <div class="pill-item searchMenu-guests form-select-guests js-form-dd">
+                                            <div class="pill-item searchMenu-guests js-form-dd">
                                                 <div data-x-dd-click="searchMenu-guests">
-                                                    <h4>عدد الاشخاص</h4>
-                                                    <div class="val">
+                                                    <h4>
+                                                        <i class="fa fa-angle-down"></i>
+                                                        عدد الاشخاص
+                                                    </h4>
+                                                    <div class="val" style="display:none !important;">
                                                         @php
                                                             $adults = request()->query('adults',1);
-                                                            $children = request()->query('children',0);
                                                         @endphp
-                                                        <div class="render">
-                                                            <span class="adults">
-                                                                <span class="one @if($adults >1) d-none @endif">{{__('1 Adult')}}</span>
-                                                                <span class="@if($adults <= 1) d-none @endif multi" data-html="{{__(':count Adults')}}">{{__(':count Adults',['count'=>request()->query('adults',1)])}}</span>
-                                                            </span>
-                                                        </div>
+                                                        <input type="text" readonly class="js-search-adults-render" style="border:none; padding:0; background:transparent; font-size:14px; color:#5E6D77; width:100%; cursor:pointer;" value="">
+                                                        <input type="hidden" name="adults" value="{{ $adults }}">
                                                     </div>
                                                 </div>
-                                                {{-- Standard Guests Dropdown (Hidden until click) --}}
-                                                <div class="searchMenu-guests__field select-guests-dropdown shadow-2" data-x-dd="searchMenu-guests" data-x-dd-toggle="-is-active">
-                                                    <div class="bg-white px-30 py-30 rounded-4">
-                                                        <div class="row y-gap-10 justify-between items-center">
-                                                            <div class="col-auto"><div class="text-15 fw-500">{{ __('Adults') }}</div></div>
-                                                            <div class="col-auto">
-                                                                <div class="d-flex items-center">
-                                                                    <span class="button -outline-blue-1 text-blue-1 size-38 rounded-4 btn-minus" data-input="adults"><i class="icon-minus text-12"></i></span>
-                                                                    <span class="flex-center size-20 ml-15 mr-15 count-display"><input type="number" name="adults" value="{{request()->query('adults',1)}}" min="1"></span>
-                                                                    <span class="button -outline-blue-1 text-blue-1 size-38 rounded-4 btn-add" data-input="adults"><i class="icon-plus text-12"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="border-top-light mt-24 mb-24"></div>
-                                                        <div class="row y-gap-10 justify-between items-center">
-                                                            <div class="col-auto"><div class="text-15 fw-500">{{ __('Children') }}</div></div>
-                                                            <div class="col-auto">
-                                                                <div class="d-flex items-center">
-                                                                    <span class="button -outline-blue-1 text-blue-1 size-38 rounded-4 btn-minus" data-input="children"><i class="icon-minus text-12"></i></span>
-                                                                    <span class="flex-center size-20 ml-15 mr-15 count-display"><input type="number" name="children" value="{{request()->query('children',0)}}" min="0"></span>
-                                                                    <span class="button -outline-blue-1 text-blue-1 size-38 rounded-4 btn-add" data-input="children"><i class="icon-plus text-12"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                
+                                                <div class="stayplan-guests-dropdown js-guests-drop-down" data-x-dd="searchMenu-guests" data-x-dd-toggle="-is-active">
+                                                    <div class="stayplan-guests-header">
+                                                        <i class="fa fa-user"></i>
+                                                        <h5>عدد الاشخاص</h5>
+                                                    </div>
+                                                    <div class="stayplan-guests-separator"></div>
+                                                    <div class="stayplan-guests-list">
+                                                        <div class="stayplan-guests-item" onclick="updateGuests(1, '1 بالغ')">1</div>
+                                                        <div class="stayplan-guests-item" onclick="updateGuests(2, '2 بالغين')">2</div>
+                                                        <div class="stayplan-guests-item" onclick="updateGuests(3, '3 بالغين')">3</div>
+                                                        <div class="stayplan-guests-item" onclick="updateGuests(4, 'أكثر من 3')">أكثر من 3</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -369,3 +591,93 @@
         </div>
     </div>
 </section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Arabic Locale Configuration
+        const arabicLocale = {
+            "format": "YYYY-MM-DD",
+            "applyLabel": "تطبيق",
+            "cancelLabel": "إلغاء",
+            "fromLabel": "من",
+            "toLabel": "إلى",
+            "customRangeLabel": "مخصص",
+            "weekLabel": "أسبوع",
+            "daysOfWeek": [
+                "أحد",
+                "إثنين",
+                "ثلاثاء",
+                "أربعاء",
+                "خميس",
+                "جمعة",
+                "سبت"
+            ],
+            "monthNames": [
+                "يناير",
+                "فبراير",
+                "مارس",
+                "أبريل",
+                "مايو",
+                "يونيو",
+                "يوليو",
+                "أغسطس",
+                "سبتمبر",
+                "أكتوبر",
+                "نوفمبر",
+                "ديسمبر"
+            ],
+            "firstDay": 0
+        };
+
+        jQuery(function($) {
+            // Re-initialize or Update existing pickers with Arabic locale
+            $('.check-in-out').each(function() {
+                const $el = $(this);
+                if ($el.data('daterangepicker')) {
+                    const picker = $el.data('daterangepicker');
+                    picker.locale = $.extend(true, picker.locale, arabicLocale);
+                    
+                    // Set default date to today if value matches today
+                    const todayStr = moment().format('YYYY-MM-DD');
+                    const valStr = $el.val();
+                    if(valStr === todayStr || !valStr) {
+                        picker.setStartDate(moment());
+                        picker.setEndDate(moment());
+                    }
+                    
+                    picker.updateMonthsInView();
+                }
+            });
+
+            $('.check-in-out').on('show.daterangepicker', function(ev, picker) {
+                // Close any other open daterangepickers
+                $('.check-in-out').not(this).each(function() {
+                    const otherPicker = $(this).data('daterangepicker');
+                    if (otherPicker && otherPicker.isShowing) {
+                        otherPicker.hide();
+                    }
+                });
+                
+                // Also close the category dropdown if open
+                $('.stayplan-search-dropdown').removeClass('-is-active');
+                $('.js-form-dd').removeClass('-is-dd-wrap-active');
+            });
+            
+            // Also close date pickers when category is clicked
+            $('[data-x-dd-click="searchMenu-loc"]').on('click', function() {
+                $('.check-in-out').each(function() {
+                    if($(this).data('daterangepicker')) {
+                        $(this).data('daterangepicker').hide();
+                    }
+                });
+            });
+
+            // Guests selection function
+            window.updateGuests = function(count, text) {
+                $('input[name="adults"]').val(count);
+                $('.js-search-adults-render').val(text);
+                $('.js-guests-drop-down').removeClass('-is-active');
+            };
+        });
+    });
+</script>

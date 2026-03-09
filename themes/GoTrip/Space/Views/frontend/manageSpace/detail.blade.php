@@ -836,9 +836,9 @@
                                 <i class="fa fa-picture-o stayplan-upload-icon-main"></i>
                                 <div class="stayplan-upload-icon-plus">+</div>
                             </div>
-                            {{-- Mask system gallery upload for better UX --}}
+                            {{-- Mask system gallery upload for better UX - use temp name to avoid conflict --}}
                             <div class="form-group-gallery" style="opacity: 0; position: absolute; width: 100%; height: 100%;">
-                                {!! \Modules\Media\Helpers\FileHelper::fieldGalleryUpload('gallery',$row->gallery) !!}
+                                {!! \Modules\Media\Helpers\FileHelper::fieldGalleryUpload('temp_gallery',$row->gallery) !!}
                             </div>
                         </div>
 
@@ -908,7 +908,7 @@
                                     <span>اختر صورة العرض من المعرض أدناه</span>
                                 </div>
                             </div>
-                            <input type="hidden" name="banner_image_id" id="banner_image_id_input" value="{{ $row->banner_image_id }}">
+                            <input type="hidden" name="temp_banner_image_id" id="banner_image_id_input" value="{{ $row->banner_image_id }}">
                         </div>
 
                         {{-- Bedroom Images Card --}}
@@ -1101,9 +1101,15 @@
             document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
             document.getElementById('step-' + step).classList.add('active');
             
-            // Step 9 logic: Dynamic Image Selection
+            // Sync Logic: Ensure data flows from wizard steps to system fields
             if(step === 9) {
+                syncGallery();
                 renderImageReview();
+            }
+
+            if(step === 10) {
+                syncBannerToSystem();
+                syncGallery();
             }
 
             // Trigger map resize when step 2 becomes active
@@ -1134,7 +1140,7 @@
         }
 
         function renderImageReview() {
-            const galleryInput = document.querySelector('input[name="gallery"]');
+            const galleryInput = document.querySelector('input[name="temp_gallery"]');
             const reviewGrid = document.getElementById('dynamic-gallery-review');
             if(!galleryInput || !reviewGrid) return;
 
@@ -1196,7 +1202,28 @@
         // Final safety sync before submit
         document.getElementById('stayplan-wizard-form').addEventListener('submit', function() {
             syncTitle(document.getElementById('stayplan-main-title').value);
+            syncBannerToSystem();
+            syncGallery();
         });
+
+        function syncBannerToSystem() {
+            const bannerId = document.getElementById('banner_image_id_input').value;
+            const systemBannerInput = document.querySelector('#step-10 [name="banner_image_id"]');
+            if(systemBannerInput && bannerId) {
+                systemBannerInput.value = bannerId;
+                // Important: Trigger any system watchers if needed
+                systemBannerInput.dispatchEvent(new Event('change'));
+            }
+        }
+
+        function syncGallery() {
+            const tempGallery = document.querySelector('input[name="temp_gallery"]');
+            const systemGallery = document.querySelector('#step-10 [name="gallery"]');
+            if(tempGallery && systemGallery) {
+                systemGallery.value = tempGallery.value;
+                systemGallery.dispatchEvent(new Event('change'));
+            }
+        }
     </script>
     <script type="text/javascript" src="{{ asset('libs/tinymce/js/tinymce/tinymce.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('js/condition.js?_ver='.config('app.asset_version')) }}"></script>
