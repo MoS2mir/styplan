@@ -199,7 +199,7 @@
             border: 3px solid #e2e8f0;
         }
         .stayplan-upload-text { text-align: center; font-size: 15px; font-weight: 700; color: #1a202c; max-width: 400px; margin: 0 auto 30px auto; line-height: 1.6; }
-        .stayplan-upload-list { width: 100%; max-width: 450px; margin: 31px auto; display: flex; flex-direction: column; gap: 20px; }
+        .stayplan-upload-list { width: 100%; max-width: 450px; margin: 31px auto; display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
         .stayplan-upload-item { display: flex; align-items: center; justify-content: flex-end; gap: 20px; }
         .stayplan-upload-item-text { font-size: 15px; font-weight: 600; color: #4a5568; text-align: right; }
         .stayplan-upload-item-text b { color: #1a202c; font-weight: 800; }
@@ -957,12 +957,19 @@
                         <h2 class="stayplan-card-title">المعلومات النهائية</h2>
                         
                         <div class="stayplan-card-body p-0">
-                            {{-- Section 1: Description & FAQs --}}
+                            {{-- Section 1: Detailed Content --}}
+                            <div class="form-section-card">
+                                @include('Space::admin/space/content')
+                            </div>
+
+                            {{-- Section: Feature Image (Crucial for system) --}}
                             <div class="form-section-card">
                                 <div class="panel">
-                                    <div class="panel-title">وصف العقار والأسئلة الشائعة</div>
+                                    <div class="panel-title"><strong>{{__('Feature Image')}}</strong></div>
                                     <div class="panel-body">
-                                        @include('Space::admin/space/content')
+                                        <div class="form-group">
+                                            {!! \Modules\Media\Helpers\FileHelper::fieldUpload('image_id',$row->image_id) !!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1056,6 +1063,14 @@
                         @if(is_default_lang())
                             <div class="tab-pane fade" id="nav-attribute">
                                 @include('Space::admin/space/attributes')
+                                <div class="panel">
+                                    <div class="panel-title"><strong>{{__('Feature Image')}}</strong></div>
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            {!! \Modules\Media\Helpers\FileHelper::fieldUpload('image_id',$row->image_id) !!}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -1208,21 +1223,60 @@
 
         function syncBannerToSystem() {
             const bannerId = document.getElementById('banner_image_id_input').value;
-            const systemBannerInput = document.querySelector('#step-10 [name="banner_image_id"]');
-            if(systemBannerInput && bannerId) {
-                systemBannerInput.value = bannerId;
-                // Important: Trigger any system watchers if needed
-                systemBannerInput.dispatchEvent(new Event('change'));
-            }
+            const src = document.querySelector('#banner-review-display img')?.src;
+            
+            if(!bannerId) return;
+
+            // Target multiple potential system fields (both in wizard and regular forms)
+            const selectors = [
+                '#step-10 [name="banner_image_id"]',
+                '#step-10 [name="image_id"]',
+                'form[name="image_id"]',
+                'form [name="banner_image_id"]',
+                '[name="image_id"]',
+                '[name="banner_image_id"]'
+            ];
+
+            selectors.forEach(selector => {
+                const inputs = document.querySelectorAll(selector);
+                inputs.forEach(input => {
+                    // Avoid syncing to the "temp" fields themselves
+                    if(input.id === 'banner_image_id_input' || input.name === 'temp_banner_image_id') return;
+
+                    input.value = bannerId;
+                    // Trigger events for Vue/other JS frameworks
+                    input.dispatchEvent(new Event('input', { bubbles: true }));
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                    
+                    // Update visual preview if using Booking Core's dungdt-upload-box
+                    const parentBox = input.closest('.dungdt-upload-box');
+                    if(parentBox) {
+                        if(src) {
+                            const demo = parentBox.querySelector('.attach-demo');
+                            if(demo) {
+                                demo.innerHTML = `<img src="${src}" class="image-responsive">`;
+                            }
+                        }
+                        const uploadBox = parentBox.querySelector('.upload-box');
+                        if(uploadBox) uploadBox.style.display = 'none';
+                    }
+                });
+            });
         }
 
         function syncGallery() {
-            const tempGallery = document.querySelector('input[name="temp_gallery"]');
-            const systemGallery = document.querySelector('#step-10 [name="gallery"]');
-            if(tempGallery && systemGallery) {
-                systemGallery.value = tempGallery.value;
-                systemGallery.dispatchEvent(new Event('change'));
-            }
+            const galleryIds = document.querySelector('input[name="temp_gallery"]')?.value;
+            if(galleryIds === undefined) return;
+
+            const systemGalleryInputs = document.querySelectorAll('[name="gallery"]');
+            systemGalleryInputs.forEach(input => {
+                // Avoid syncing to "temp_gallery" itself
+                if(input.name === 'temp_gallery') return;
+
+                input.value = galleryIds;
+                input.dispatchEvent(new Event('input', { bubbles: true }));
+                input.dispatchEvent(new Event('change', { bubbles: true }));
+            });
         }
     </script>
     <script type="text/javascript" src="{{ asset('libs/tinymce/js/tinymce/tinymce.min.js') }}" ></script>
@@ -1230,4 +1284,3 @@
     <script type="text/javascript" src="{{url('module/core/js/map-engine.js?_ver='.config('app.asset_version'))}}"></script>
     {!! App\Helpers\MapEngine::scripts() !!}
 @endpush
-
