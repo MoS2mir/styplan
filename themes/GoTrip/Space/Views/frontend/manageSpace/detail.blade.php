@@ -962,17 +962,8 @@
                                 @include('Space::admin/space/content')
                             </div>
 
-                            {{-- Section: Feature Image (Crucial for system) --}}
-                            <div class="form-section-card">
-                                <div class="panel">
-                                    <div class="panel-title"><strong>{{__('Feature Image')}}</strong></div>
-                                    <div class="panel-body">
-                                        <div class="form-group">
-                                            {!! \Modules\Media\Helpers\FileHelper::fieldUpload('image_id',$row->image_id) !!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {{-- Hidden Feature Image for background sync from Banner selection --}}
+                            <input type="hidden" name="image_id" value="{{$row->image_id}}">
 
                             {{-- Section 2: Pricing & Rules --}}
                             <div class="form-section-card" style="background: #f8fafc; border-color: #e2e8f0;">
