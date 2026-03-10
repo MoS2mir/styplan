@@ -112,7 +112,7 @@ class ListAllService extends BaseBlock
         $model['style'] = !empty($model['style']) ? $model['style'] :  "style_1";
         $model['order'] = !empty($model['order']) ? $model['order'] :  "id";
         $model['order_by'] = !empty($model['order_by']) ? $model['order_by'] :  "desc";
-        $model['number'] = !empty($model['number']) ? $model['number'] :  8;
+        $model['number'] = (!empty($model['number']) && $model['number'] > 4) ? $model['number'] : 12;
         $model['modelBlock'] = $model;
         $model['rows'] = [];
         if(!empty($model['service_types'])){

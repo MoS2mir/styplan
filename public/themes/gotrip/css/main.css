@@ -13116,3 +13116,9 @@ table.table-5 td {
     display: none;
   }
 }
+
+.cardImage {
+  width: 224px;
+  height: 224px;
+  border-radius: 10px;
+}

@@ -20,72 +20,58 @@
                         @endif
                     </div>
                 </a>
-                <div class="service-wishlist {{$row->isWishList()}}" data-id="{{ $row->id }}" data-type="{{ $row->type }}">
+                <div class="service-wishlist {{$row->isWishList()}}" data-id="{{ $row->id }}" data-type="{{ $row->type }}" style="right: 15px !important; left: auto !important;">
                     <div class="cardImage__wishlist">
                         <button class="button -blue-1 bg-white size-30 rounded-full shadow-2">
                             <i class="icon-heart text-12"></i>
                         </button>
                     </div>
                 </div>
-                <div class="cardImage__leftBadge">
-                    @if($row->is_featured == "1")
-                        <div class="py-5 px-15 rounded-right-4 text-12 lh-16 fw-500 uppercase bg-yellow-1 text-dark-1">
-                            {{__("Featured")}}
-                        </div>
-                    @endif
-                    @if($row->discount_percent)
-                        <div class="py-5 px-15 rounded-right-4 text-12 lh-16 fw-500 uppercase bg-blue-1 text-white mt-5">
-                            {{__("Sale off :number",['number'=>$row->discount_percent])}}
-                        </div>
-                    @endif
-                </div>
             </div>
         </div>
         <div class="hotelsCard__content mt-10">
-            @if(!empty($row->location->name))
-                @php $location =  $row->location->translate() @endphp
-            <p class="text-light-1 lh-14 text-14 mt-5">{{$location->name ?? ''}}</p>
-            @endif
+            {{-- 1. Title --}}
             <h4 class="hotelsCard__title text-dark-1 text-18 lh-16 fw-500">
                 <a class="text-dark-1-i" @if(!empty($blank)) target="_blank" @endif href="{{ $row->getDetailUrl() }}"> <span>{{ $translation->title }}</span></a>
             </h4>
-            <div class="amenities">
-                <div class="d-flex items-center mt-5">
-                    @if($row->max_guests)
-                        @php $guest = ($row->max_guests > 1) ? __('guests') : __('guest') @endphp
-                        <div class="text-14 text-light-1">{{ __(':count :guest',['count'=>$row->max_guests,'guest'=>$guest]) }}</div>
-                    @endif
-                        <div class="size-3 bg-light-1 rounded-full ml-10 mr-10"></div>
-                    @if($row->bathroom)
-                        <div class="text-14 text-light-1">{{ __(':count bathroom',['count' => $row->bathroom]) }}</div>
-                    @endif
-                        <div class="size-3 bg-light-1 rounded-full ml-10 mr-10"></div>
-                    @if($row->bed)
-                        <div class="text-14 text-light-1">{{ __(':count bed',['count' => $row->bed]) }}</div>
-                    @endif
-                </div>
-            </div>
+
+            {{-- 2. Star Rating --}}
             @if(setting_item('space_enable_review'))
-                <?php $reviewData = $row->getScoreReview(); $score_total = $reviewData['score_total'];?>
-                <div class="d-flex items-center mt-20">
-                    <div class="flex-center bg-blue-1 rounded-4 size-30 text-12 fw-600 text-white">{{ $reviewData['score_total'] }}</div>
-                    <div class="text-14 text-dark-1 fw-500 ml-10">{{ $reviewData['review_text'] }}</div>
+                @php $reviewData = $row->getScoreReview(); $score_total = $reviewData['score_total']; @endphp
+                <div class="d-flex items-center mt-5">
+                    <div class="d-flex x-gap-5 items-center">
+                        @for($i = 5; $i >= 1; $i--)
+                            @if($i <= (int)$score_total)
+                                <i class="icon-star text-10 text-yellow-1"></i>
+                            @else
+                                <i class="icon-star text-10 text-light-2"></i>
+                            @endif
+                        @endfor
+                    </div>
                     <div class="text-14 text-light-1 ml-10">
-                        @if($reviewData['total_review'] > 1)
-                            {{ __(":number Reviews",["number"=>$reviewData['total_review'] ]) }}
-                        @else
-                            {{ __(":number Review",["number"=>$reviewData['total_review'] ]) }}
-                        @endif
+                        {{ $reviewData['total_review'] }} {{ __("تقييم") }}
                     </div>
                 </div>
             @endif
+
+            {{-- 3. Location --}}
+            @if(!empty($row->location->name))
+                @php $location =  $row->location->translate() @endphp
+                <p class="text-light-1 lh-14 text-14 mt-5">
+                    <i class="icon-location-2 mr-5"></i>{{$location->name ?? ''}}
+                </p>
+            @endif
+
+            {{-- 4. Price --}}
             <div class="mt-5">
                 <div class="text-light-1 align-baseline">
                     <div class="d-inline-flex justify-content-md-end align-baseline">
-                        <div class="text-16 text-red-1 line-through mr-5">{{ $row->display_sale_price }}</div>
+                        @if($row->discount_percent)
+                            <div class="text-16 text-red-1 line-through mr-5">{{ $row->display_sale_price }}</div>
+                        @endif
                         <div class="text-18 fw-500 text-dark-1">{{ $row->display_price }}</div>
                     </div>
-                    / {{ __('per night') }}
+                    - {{ __('per night') }}
                 </div>
             </div>
         </div>
